@@ -58,6 +58,7 @@ public class KeycloakRoleService extends AbstractGeoServerSecurityService
     private String clientID;
     private String idOfClient;
     private String clientSecret;
+    private Boolean useRealmRoles;
 
     public KeycloakRoleService() throws IOException {
         emptySet = Collections.unmodifiableSortedSet(new TreeSet<GeoServerRole>());
@@ -79,6 +80,10 @@ public class KeycloakRoleService extends AbstractGeoServerSecurityService
             clientID = keycloakConfig.getClientID();
             idOfClient = keycloakConfig.getIdOfClient();
             clientSecret = keycloakConfig.getClientSecret();
+            useRealmRoles = keycloakConfig.getUseRealmRoles();
+            if(useRealmRoles == null) {
+                useRealmRoles = false;
+            }
         }
 
         load();
@@ -324,14 +329,19 @@ public class KeycloakRoleService extends AbstractGeoServerSecurityService
      */
     public List<GeoServerRole> getRoles(
             CloseableHttpClient httpClient, Gson gson, String accessToken) {
-        HttpGet httpGet =
-                new HttpGet(
-                        this.serverURL
-                                + "/auth/admin/realms/"
-                                + this.realm
-                                + "/clients/"
-                                + this.idOfClient
-                                + "/roles");
+        String roleUrl;
+        if (this.useRealmRoles) {
+            roleUrl = this.serverURL + "/auth/admin/realms/" + this.realm + "/roles";
+        } else {
+            roleUrl =
+                    this.serverURL
+                            + "/auth/admin/realms/"
+                            + this.realm
+                            + "/clients/"
+                            + this.idOfClient
+                            + "/roles";
+        }
+        HttpGet httpGet = new HttpGet(roleUrl);
         httpGet.setHeader("Authorization", "Bearer " + accessToken);
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             StatusLine statusLine = response.getStatusLine();

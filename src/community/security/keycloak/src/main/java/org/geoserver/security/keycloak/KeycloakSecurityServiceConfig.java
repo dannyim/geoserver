@@ -14,6 +14,7 @@ public class KeycloakSecurityServiceConfig extends BaseSecurityNamedServiceConfi
     private String clientID;
     private String idOfClient;
     private String clientSecret;
+    private Boolean useRealmRoles;
 
     public KeycloakSecurityServiceConfig() {}
 
@@ -24,6 +25,7 @@ public class KeycloakSecurityServiceConfig extends BaseSecurityNamedServiceConfi
         clientID = other.getClientID();
         idOfClient = other.getIdOfClient();
         clientSecret = other.getClientSecret();
+        useRealmRoles = other.getUseRealmRoles();
     }
 
     public String getServerURL() {
@@ -73,5 +75,13 @@ public class KeycloakSecurityServiceConfig extends BaseSecurityNamedServiceConfi
 
     public void setClientSecret(String clientSecret) {
         this.clientSecret = clientSecret;
+    }
+
+    public Boolean getUseRealmRoles() {
+        return useRealmRoles;
+    }
+
+    public void setUseRealmRoles(Boolean useRealmRoles) {
+        this.useRealmRoles = useRealmRoles;
     }
 }

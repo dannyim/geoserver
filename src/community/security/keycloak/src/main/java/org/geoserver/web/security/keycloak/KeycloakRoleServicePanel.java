@@ -5,6 +5,7 @@
  */
 package org.geoserver.web.security.keycloak;
 
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.geoserver.security.keycloak.KeycloakRoleService;
@@ -22,5 +23,6 @@ public class KeycloakRoleServicePanel extends RoleServicePanel<KeycloakRoleServi
         add(new TextField<String>("clientID").setRequired(true));
         add(new TextField<String>("idOfClient").setRequired(true));
         add(new TextField<String>("clientSecret").setRequired(true));
+        add(new CheckBox("useRealmRoles").setRequired(false));
     }
 }
